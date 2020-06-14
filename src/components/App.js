@@ -58,6 +58,35 @@ class App extends Component {
     this.setState({ loading: false });
   }
 
+  buyTokens = (etherAmount) => {
+    this.setState({ loading: true });
+    this.state.ethSwap.methods.buyToken
+      .send({
+        value: etherAmount,
+        from: this.state.account,
+      })
+      .on("transactionHash", (hash) => {
+        this.setState({ loading: false });
+      });
+  };
+
+  sellTokens = (tokenAmount) => {
+    this.setState({ loading: true });
+    this.state.token.methods
+      .approve(this.state.ethSwap.address, tokenAmount)
+      .send({
+        from: this.state.account,
+      })
+      .on("transactionHash", (hash) => {
+        this.state.ethSwap.methods
+          .sellToken(tokenAmount)
+          .send({ from: this.state.account })
+          .on("transactionHash", (hash) => {
+            this.setState({ loading: false });
+          });
+      });
+  };
+
   async componentWillMount() {
     await this.loadWeb3();
     await this.loadBlockchainData();
@@ -76,11 +105,19 @@ class App extends Component {
             >
               <div className="content mr-auto ml-auto">
                 {this.state.loading ? (
-                  <div className="spinner-border text-primary" role="status">
+                  <div
+                    className="spinner-border text-primary mt-3"
+                    role="status"
+                  >
                     <span className="sr-only">Loading...</span>
                   </div>
                 ) : (
-                  <Main />
+                  <Main
+                    ethBalance={this.state.ethBalance}
+                    tokenBalance={this.state.tokenBalance}
+                    buyTokens={this.buyTokens}
+                    sellTokens={this.sellTokens}
+                  />
                 )}
               </div>
             </main>
