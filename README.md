@@ -9,3 +9,10 @@
 #### Sell Tokens (ScreenShot) :
 
 ![Sell Tokens](./screenshots/2.png)
+
+### Procedure to Run Locally :
+
+1. git clone https://github.com/shubham-kukreja/EthSwap.git
+2. npm install
+3. QuickStart Ganache
+4. npm run start (MetaMask Extension Required for trading tokens)
