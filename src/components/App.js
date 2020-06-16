@@ -60,6 +60,7 @@ class App extends Component {
 
   buyTokens = (etherAmount) => {
     this.setState({ loading: true });
+    console.log(this.state.ethSwap.methods);
     this.state.ethSwap.methods.buyToken
       .send({
         value: etherAmount,
